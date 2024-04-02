@@ -3,6 +3,8 @@ import { generateToken } from "../config/generateToken.js";
 import { User } from "../models/userModel.js";
 import { validateUserId } from "../utils/validateUserId.js";
 import jwt from "jsonwebtoken";
+import { sendMail } from "./mailController.js";
+import crypto from "crypto";
 
 export const createUser = async (req, res) => {
 	try {
@@ -202,4 +204,69 @@ export const deleteUser = async (req, res) => {
 	} catch (error) {
 		console.log(error);
 	}
+};
+
+//update password
+
+export const updatePassword = async (req, res) => {
+	const { _id } = req.user;
+	const { password } = req.body;
+	validateUserId(_id);
+	const user = await User.findById(_id);
+	if (password) {
+		user.password = password;
+		const updatePassword = await user.save();
+		res.json(updatePassword);
+	} else {
+		res.json(user);
+	}
+};
+
+// generate forgot password token
+
+export const forgotPasswordToken = async (req, res) => {
+	const { email } = req.body;
+	const user = await User.findOne({ email });
+	if (!user) {
+		res.status(500).json({
+			message: "User Not Found with this Email",
+		});
+	}
+	try {
+		const token = await user.createPasswordResetToken();
+		await user.save();
+		const resetUrl = `Hi please follow this link to resest your account password, this link is valid for 10 minutes from now <a href="http://localhost:3000/api/user/reset-password/${token}">Click Here</a>`;
+		const data = {
+			to: email,
+			text: "Hey User",
+			subject: "Forgot Password Link",
+			htm: resetUrl,
+		};
+		sendMail(data);
+		res.json(token);
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+// reset password
+
+export const resetPassword = async (req, res) => {
+	const { password } = req.body;
+	const { token } = req.params;
+	const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+	const user = await User.findOne({
+		passwordResetToken: hashedToken,
+		passwordResetExpire: { $gt: Date.now() },
+	});
+	if (!user) {
+		res.status(500).json({
+			message: "Token Expired, Please try again later",
+		});
+	}
+	user.password = password;
+	user.passwordResetToken = undefined;
+	user.passwordResetExpire = undefined;
+	await user.save();
+	res.json(user);
 };
