@@ -5,6 +5,8 @@ import { validateUserId } from "../utils/validateUserId.js";
 import jwt from "jsonwebtoken";
 import { sendMail } from "./mailController.js";
 import crypto from "crypto";
+import { Product } from "../models/productModel.js";
+import { Cart } from "../models/cartModel.js";
 
 export const createUser = async (req, res) => {
 	try {
@@ -357,6 +359,22 @@ export const getWishlist = async (req, res) => {
 	try {
 		const findUser = await User.findById(_id).populate("wishlist");
 		res.json(findUser);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
+
+export const userCart = async (req, res) => {
+	const { cart } = req.body;
+	const { _id } = req.user;
+	validateUserId(_id);
+	try {
+		const user = await User.findById(_id);
+		const alreadyExistInCart = await Cart.findOne({ orderBy: user._id });
+		if (alreadyExistInCart) {
+			alreadyExistInCart.remove();
+		}
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });

@@ -13,6 +13,7 @@ import {
 	saveAddress,
 	updatePassword,
 	updateUser,
+	userCart,
 	userLogin,
 } from "../controllers/userController.js";
 import { auth, isAdmin } from "../middlewares/authMiddleware.js";
@@ -24,6 +25,7 @@ router.put("/reset-password/:token", resetPassword);
 router.put("/password", auth, updatePassword);
 router.post("/login", userLogin);
 router.post("/login-admin", adminLogin);
+router.post("/cart", userCart);
 router.put("/update-user", auth, updateUser);
 router.put("/address", auth, saveAddress);
 router.get("/allusers", auth, isAdmin, getAllUsers);
