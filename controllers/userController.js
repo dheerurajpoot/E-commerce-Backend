@@ -21,6 +21,7 @@ export const createUser = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
@@ -58,6 +59,50 @@ export const userLogin = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
+
+// login Admin
+
+export const adminLogin = async (req, res) => {
+	try {
+		const { email, password } = req.body;
+		const findAdmin = await User.findOne({ email });
+		if (findAdmin.role !== "admin") {
+			res.status(301).json({
+				message: "You are not Authorised",
+			});
+		}
+		if (findAdmin && (await findAdmin.isPasswordMatched(password))) {
+			const refreshToken = await generateRefreshToken(findAdmin?._id);
+			const updateAdmin = await User.findByIdAndUpdate(
+				findAdmin.id,
+				{
+					refreshToken: refreshToken,
+				},
+				{ new: true }
+			);
+			res.cookie("refreshToken", refreshToken, {
+				httpOnly: true,
+				maxAge: 72 * 60 * 60 * 1000,
+			});
+			res.status(200).json({
+				_id: findAdmin?._id,
+				name: findAdmin?.name,
+				email: findAdmin?.email,
+				mobile: findAdmin?.mobile,
+				token: generateToken(findAdmin?._id),
+			});
+		} else {
+			res.status(500).json({
+				message: "Invalid Email or Password",
+				success: false,
+			});
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
@@ -148,6 +193,35 @@ export const updateUser = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
+
+// user address
+
+export const saveAddress = async (req, res) => {
+	const { _id } = req.user;
+	try {
+		const updateUser = await User.findByIdAndUpdate(
+			_id,
+			{
+				address: req?.body?.address,
+			},
+			{
+				new: true,
+			}
+		);
+		if (updateUser) {
+			res.status(200).json(updateUser);
+		} else {
+			res.status(500).json({
+				message: "Internal Server Error",
+				success: false,
+			});
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
@@ -166,6 +240,7 @@ export const getAllUsers = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
@@ -185,6 +260,7 @@ export const getUser = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
@@ -203,6 +279,7 @@ export const deleteUser = async (req, res) => {
 		}
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
@@ -246,6 +323,7 @@ export const forgotPasswordToken = async (req, res) => {
 		res.json(token);
 	} catch (error) {
 		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
 
@@ -269,4 +347,18 @@ export const resetPassword = async (req, res) => {
 	user.passwordResetExpire = undefined;
 	await user.save();
 	res.json(user);
+};
+
+// get wishlist
+
+export const getWishlist = async (req, res) => {
+	const { _id } = req.user;
+	validateUserId(_id);
+	try {
+		const findUser = await User.findById(_id).populate("wishlist");
+		res.json(findUser);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
 };
