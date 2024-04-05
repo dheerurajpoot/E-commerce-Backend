@@ -2,6 +2,7 @@ import express from "express";
 import {
 	addToWishlist,
 	createProduct,
+	deleteImages,
 	deleteProduct,
 	getAllProducts,
 	getProduct,
@@ -16,7 +17,7 @@ const router = express.Router();
 
 router.post("/", auth, isAdmin, createProduct);
 router.put(
-	"/upload/:id",
+	"/upload",
 	auth,
 	isAdmin,
 	uploadPhoto.array("images", 10),
@@ -29,5 +30,6 @@ router.put("/wishlist", auth, addToWishlist);
 router.put("/rating", auth, rating);
 router.put("/:id", auth, isAdmin, updateProduct);
 router.delete("/:id", auth, isAdmin, deleteProduct);
+router.delete("/delete-image/:id", auth, isAdmin, deleteImages);
 
 export default router;

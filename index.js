@@ -6,6 +6,8 @@ import productRoute from "./routes/productRoute.js";
 import categoryRoute from "./routes/categoryRoute.js";
 import brandRoute from "./routes/brandRoute.js";
 import couponRoute from "./routes/couponRoute.js";
+import colorRoute from "./routes/colorRoute.js";
+import contactRoute from "./routes/contactRoute.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
@@ -26,6 +28,8 @@ app.use("/api/product", productRoute);
 app.use("/api/category", categoryRoute);
 app.use("/api/brand", brandRoute);
 app.use("/api/coupon", couponRoute);
+app.use("/api/color", colorRoute);
+app.use("/api/contact", contactRoute);
 
 app.listen(3000, () => {
 	console.log(`Server is running on port ${process.env.PORT}`);

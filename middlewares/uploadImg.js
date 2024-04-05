@@ -43,20 +43,6 @@ export const uploadPhoto = multer({
 	limits: { fileSize: 2000000 },
 });
 
-// export const productImgResize = async (req, res, next) => {
-// 	if (!req.files) return next();
-// 	await Promise.all(
-// 		req.files.map(async (file) => {
-// 			await sharp(file.path)
-// 				.resize(300, 300)
-// 				.toFormat("jpeg")
-// 				.jpeg({ quality: 90 })
-// 				.toFile(`public/images/products/${file.filename}`);
-// 		})
-// 	);
-// 	next();
-// };
-
 export const productImgResize = async (req, res, next) => {
 	if (!req.files) return next();
 	await Promise.all(
