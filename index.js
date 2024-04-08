@@ -11,6 +11,7 @@ import contactRoute from "./routes/contactRoute.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
+import cors from "cors";
 const app = express();
 
 dbconnect();
@@ -18,6 +19,7 @@ app.get("/", function (req, res) {
 	res.send("server is running....,");
 });
 
+app.use(cors());
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
