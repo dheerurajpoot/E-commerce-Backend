@@ -6,6 +6,7 @@ import {
 	createUser,
 	deleteUser,
 	forgotPasswordToken,
+	getAllOrder,
 	getAllUsers,
 	getOrder,
 	getUser,
@@ -39,6 +40,7 @@ router.post("/cart/cash-order", auth, createOrder);
 router.put("/address", auth, saveAddress);
 router.get("/all-users", auth, isAdmin, getAllUsers);
 router.get("/get-orders", auth, getOrder);
+router.get("/all-orders", auth, isAdmin, getAllOrder);
 router.get("/refresh", refreshTokenHandler);
 router.get("/logout", logOut);
 router.get("/wishlist", auth, getWishlist);

@@ -8,6 +8,7 @@ import brandRoute from "./routes/brandRoute.js";
 import couponRoute from "./routes/couponRoute.js";
 import colorRoute from "./routes/colorRoute.js";
 import contactRoute from "./routes/contactRoute.js";
+import uploadRoute from "./routes/uploadRoute.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
@@ -32,6 +33,7 @@ app.use("/api/brand", brandRoute);
 app.use("/api/coupon", couponRoute);
 app.use("/api/color", colorRoute);
 app.use("/api/contact", contactRoute);
+app.use("/api/upload", uploadRoute);
 
 app.listen(3000, () => {
 	console.log(`Server is running on port ${process.env.PORT}`);

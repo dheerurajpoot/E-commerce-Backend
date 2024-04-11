@@ -526,8 +526,23 @@ export const getOrder = async (req, res) => {
 		validateUserId(_id);
 		const userOrder = await Order.findOne({ orderBy: _id })
 			.populate("products.product")
+			.populate("orderBy")
 			.exec();
 		res.status(200).json(userOrder);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
+
+// get all orders
+export const getAllOrder = async (req, res) => {
+	try {
+		const allOrders = await Order.find()
+			.populate("products.product")
+			.populate("orderBy")
+			.exec();
+		res.status(200).json(allOrders);
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });

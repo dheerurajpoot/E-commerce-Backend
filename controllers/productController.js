@@ -2,11 +2,6 @@ import slugify from "slugify";
 import { Product } from "../models/productModel.js";
 import { User } from "../models/userModel.js";
 import { validateUserId } from "../utils/validateUserId.js";
-import {
-	cloudinaryImgDelete,
-	cloudinaryImgUpload,
-} from "../utils/cloudinary.js";
-import fs from "fs";
 
 export const createProduct = async (req, res) => {
 	try {
@@ -25,6 +20,7 @@ export const createProduct = async (req, res) => {
 
 export const getProduct = async (req, res) => {
 	const { id } = req.params;
+	validateUserId(id);
 	try {
 		const findProduct = await Product.findById(id);
 		res.status(200).json(findProduct);
@@ -50,6 +46,7 @@ export const getAllProducts = async (req, res) => {
 
 export const updateProduct = async (req, res) => {
 	const { id } = req.params;
+	validateUserId(id);
 	try {
 		if (req.body.title) {
 			req.body.slug = slugify(req.body.title);
@@ -179,44 +176,6 @@ export const rating = async (req, res) => {
 			);
 			res.json(finalProduct);
 		}
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-};
-
-// image upload
-
-export const uploadImages = async (req, res) => {
-	try {
-		const uploader = (path) => cloudinaryImgUpload(path, "images");
-		const urls = [];
-		const files = req.files;
-		for (const file of files) {
-			const { path } = file;
-			const newPath = await uploader(path);
-			urls.push(newPath);
-			fs.unlinkSync(path);
-		}
-		const images = urls.map((file) => {
-			return file;
-		});
-		res.json(images);
-	} catch (error) {
-		console.log(error);
-		res.status(500).json({ error: "Internal Server Error" });
-	}
-};
-
-// image delete
-
-export const deleteImages = async (req, res) => {
-	const { id } = req.params;
-	try {
-		const deletedImg = cloudinaryImgDelete(id, "images");
-		res.status(200).json({
-			message: "Image Deleted Successfully",
-		});
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });
