@@ -143,7 +143,7 @@ export const rating = async (req, res) => {
 				},
 				{ new: true }
 			);
-			res.json(finalProduct); // Send the updated product with total rating
+			res.json(finalProduct);
 		} else {
 			// Add new rating if not already rated
 			let rateProduct = await Product.findByIdAndUpdate(

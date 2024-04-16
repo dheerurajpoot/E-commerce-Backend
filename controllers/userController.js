@@ -559,9 +559,9 @@ export const updateOrderStatus = async (req, res) => {
 			id,
 			{
 				orderStatus: status,
-				paymentIntent: {
-					status: status,
-				},
+				// paymentIntent: {
+				// 	status: status,
+				// },
 			},
 			{
 				new: true,
