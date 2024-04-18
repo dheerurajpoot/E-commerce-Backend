@@ -371,35 +371,16 @@ export const getWishlist = async (req, res) => {
 // user cart
 
 export const userCart = async (req, res) => {
-	const { cart } = req.body;
+	const { productId, color, quantity, price } = req.body;
 	const { _id } = req.user;
 	validateUserId(_id);
 	try {
-		let products = [];
-		const user = await User.findById(_id);
-		const alreadyExistInCart = await Cart.findOne({ orderBy: user._id });
-		if (alreadyExistInCart) {
-			await Cart.deleteOne({ orderBy: user._id });
-		}
-		for (let i = 0; i < cart.length; i++) {
-			const object = {};
-			object.product = cart[i]._id;
-			object.count = cart[i].count;
-			object.color = cart[i].color;
-			let getPrice = await Product.findById(cart[i]._id)
-				.select("price")
-				.exec();
-			object.price = getPrice.price;
-			products.push(object);
-		}
-		let cartTotal = 0;
-		for (let i = 0; i < products.length; i++) {
-			cartTotal = cartTotal + products[i].price * products[i].count;
-		}
 		let newCart = await new Cart({
-			products,
-			cartTotal,
-			orderBy: user?._id,
+			userId: _id,
+			productId,
+			color,
+			quantity,
+			price,
 		}).save();
 		res.status(200).json(newCart);
 	} catch (error) {
@@ -414,16 +395,31 @@ export const getUserCart = async (req, res) => {
 	const { _id } = req.user;
 	validateUserId(_id);
 	try {
-		const cart = await Cart.findOne({ orderBy: _id }).populate(
-			"products.product"
-		);
+		const cart = await Cart.find({ userId: _id }).populate("productId");
 		res.json(cart);
 	} catch (error) {
 		console.log(error);
 	}
 };
 
-// remove cart
+// remove cart products
+
+export const removeCartItem = async (req, res) => {
+	const { _id } = req.user;
+	const { id } = req.params;
+	validateUserId(_id);
+	try {
+		const deletedCartItem = await Cart.deleteOne({
+			userId: _id,
+			_id: id,
+		});
+		res.json(deletedCartItem);
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+// empty cart
 export const removeCart = async (req, res) => {
 	const { _id } = req.user;
 	validateUserId(_id);

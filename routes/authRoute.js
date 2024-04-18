@@ -15,6 +15,7 @@ import {
 	logOut,
 	refreshTokenHandler,
 	removeCart,
+	removeCartItem,
 	resetPassword,
 	saveAddress,
 	updateOrderStatus,
@@ -47,6 +48,7 @@ router.get("/wishlist", auth, getWishlist);
 router.get("/cart", auth, getUserCart);
 router.get("/:id", auth, getUser);
 router.delete("/remove-cart", auth, removeCart);
+router.delete("/remove-cart-product/:id", auth, removeCartItem);
 router.delete("/:id", deleteUser);
 
 export default router;
