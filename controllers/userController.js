@@ -419,6 +419,25 @@ export const removeCartItem = async (req, res) => {
 	}
 };
 
+// update cart product quantity
+
+export const updateCartProductQty = async (req, res) => {
+	const { _id } = req.user;
+	const { id, newquantity } = req.params;
+	validateUserId(_id);
+	try {
+		const cartItem = await Cart.findOne({
+			userId: _id,
+			_id: id,
+		});
+		cartItem.quantity = newquantity;
+		cartItem.save();
+		res.json(cartItem);
+	} catch (error) {
+		console.log(error);
+	}
+};
+
 // empty cart
 export const removeCart = async (req, res) => {
 	const { _id } = req.user;

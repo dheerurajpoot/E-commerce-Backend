@@ -18,6 +18,7 @@ import {
 	removeCartItem,
 	resetPassword,
 	saveAddress,
+	updateCartProductQty,
 	updateOrderStatus,
 	updatePassword,
 	updateUser,
@@ -49,6 +50,11 @@ router.get("/cart", auth, getUserCart);
 router.get("/:id", auth, getUser);
 router.delete("/remove-cart", auth, removeCart);
 router.delete("/remove-cart-product/:id", auth, removeCartItem);
+router.delete(
+	"/update-cart-product/:id/:newquantity",
+	auth,
+	updateCartProductQty
+);
 router.delete("/:id", deleteUser);
 
 export default router;
