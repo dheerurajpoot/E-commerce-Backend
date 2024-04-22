@@ -2,31 +2,87 @@ import mongoose from "mongoose";
 
 let orderSchema = new mongoose.Schema(
 	{
-		products: [
+		user: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "User",
+			required: true,
+		},
+		shippingInfo: {
+			name: {
+				type: String,
+				required: true,
+			},
+			address: {
+				type: String,
+				required: true,
+			},
+			city: {
+				type: String,
+				required: true,
+			},
+			state: {
+				type: String,
+				required: true,
+			},
+			country: {
+				type: String,
+				required: true,
+			},
+			other: {
+				type: String,
+			},
+			pincode: {
+				type: Number,
+				required: true,
+			},
+		},
+		paymentInfo: {
+			razorpayOrderId: {
+				type: String,
+				required: true,
+			},
+			razorpayPaymentId: {
+				type: String,
+				required: true,
+			},
+		},
+		orderItems: [
 			{
 				product: {
 					type: mongoose.Schema.Types.ObjectId,
 					ref: "Product",
+					required: true,
 				},
-				count: Number,
-				color: String,
+				color: {
+					type: mongoose.Schema.Types.ObjectId,
+					required: true,
+					ref: "Color",
+				},
+				quantity: {
+					type: Number,
+					required: true,
+				},
+				price: {
+					type: Number,
+					required: true,
+				},
 			},
 		],
-		paymentIntent: {},
+		paidAt: {
+			type: Date,
+			default: Date.now(),
+		},
+		totalPrice: {
+			type: Number,
+			required: true,
+		},
+		priceAfterDiscount: {
+			type: Number,
+			required: true,
+		},
 		orderStatus: {
 			type: String,
-			default: "Shipped",
-			enum: [
-				"Shipped",
-				"Processing",
-				"Dispatched",
-				"Cancelled",
-				"Delivered",
-			],
-		},
-		orderBy: {
-			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
+			default: "ordered",
 		},
 	},
 	{ timestamps: true }
