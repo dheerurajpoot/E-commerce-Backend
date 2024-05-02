@@ -8,9 +8,9 @@ import {
 	forgotPasswordToken,
 	// getAllOrder,
 	getAllUsers,
-	// getOrder,
 	getUser,
 	getUserCart,
+	getUserOrder,
 	getWishlist,
 	logOut,
 	refreshTokenHandler,
@@ -47,7 +47,7 @@ router.put("/update-user", auth, updateUser);
 router.post("/cart/create-order", auth, createOrder);
 router.put("/address", auth, saveAddress);
 router.get("/all-users", auth, isAdmin, getAllUsers);
-// router.get("/get-orders", auth, getOrder);
+router.get("/get-orders", auth, getUserOrder);
 // router.get("/all-orders", auth, isAdmin, getAllOrder);
 router.get("/refresh", refreshTokenHandler);
 router.get("/logout", logOut);

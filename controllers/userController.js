@@ -465,6 +465,23 @@ export const createOrder = async (req, res) => {
 		console.log(error);
 	}
 };
+
+// get orders
+
+export const getUserOrder = async (req, res) => {
+	try {
+		const { _id } = req.user;
+		validateUserId(_id);
+		const userOrder = await Order.find({ user: _id })
+			.populate("user")
+			.populate("orderItems.product");
+		res.status(200).json({ userOrder });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
+
 // empty cart
 // export const removeCart = async (req, res) => {
 // 	const { _id } = req.user;
@@ -505,76 +522,6 @@ export const createOrder = async (req, res) => {
 // 		{ new: true }
 // 	);
 // 	res.status(200).json(totalAfterDiscount);
-// };
-
-// // create order
-
-// export const createOrder = async (req, res) => {
-// 	const { COD, couponApplied } = req.body;
-// 	const { _id } = req.user;
-// 	validateUserId(_id);
-// 	try {
-// 		if (!COD) {
-// 			res.json({
-// 				message: "Create Cash On Delivery Order Failed",
-// 			});
-// 		}
-// 		const user = await User.findById(_id);
-// 		const userCart = await Cart.findOne({ orderBy: user._id });
-// 		let finalAmmount = 0;
-// 		if (couponApplied && userCart.totalAfterDiscount) {
-// 			finalAmmount = userCart.totalAfterDiscount;
-// 		} else {
-// 			finalAmmount = userCart.cartTotal;
-// 		}
-// 		let newOrder = await new Order({
-// 			products: userCart.products,
-// 			paymentIntent: {
-// 				id: uniqid(),
-// 				method: "COD",
-// 				ammount: finalAmmount,
-// 				status: "Cash On Delivery",
-// 				created: Date.now(),
-// 				currency: "INR",
-// 			},
-// 			orderBy: user._id,
-// 			orderStatus: "Cash On Delivery",
-// 		}).save();
-// 		let update = userCart.products.map((item) => {
-// 			return {
-// 				updateOne: {
-// 					filter: { _id: item.product._id },
-// 					update: {
-// 						$inc: { quantity: -item.count, sold: +item.count },
-// 					},
-// 				},
-// 			};
-// 		});
-// 		const updated = await Product.bulkWrite(update, {});
-// 		res.status(200).json({
-// 			message: "Order Sucessfully Created",
-// 		});
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.status(500).json({ error: "Internal Server Error" });
-// 	}
-// };
-
-// // get orders
-
-// export const getOrder = async (req, res) => {
-// 	try {
-// 		const { _id } = req.user;
-// 		validateUserId(_id);
-// 		const userOrder = await Order.findOne({ orderBy: _id })
-// 			.populate("products.product")
-// 			.populate("orderBy")
-// 			.exec();
-// 		res.status(200).json(userOrder);
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.status(500).json({ error: "Internal Server Error" });
-// 	}
 // };
 
 // // get all orders
