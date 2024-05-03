@@ -22,7 +22,9 @@ export const getProduct = async (req, res) => {
 	const { id } = req.params;
 	validateUserId(id);
 	try {
-		const findProduct = await Product.findById(id);
+		const findProduct = await Product.findById(id).populate(
+			"rating.postedBy"
+		);
 		res.status(200).json(findProduct);
 	} catch (error) {
 		console.log(error);
@@ -73,6 +75,8 @@ export const deleteProduct = async (req, res) => {
 		res.status(500).json({ error: "Internal Server Error" });
 	}
 };
+
+// add to wishlist
 
 export const addToWishlist = async (req, res) => {
 	const { _id } = req.user;
