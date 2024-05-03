@@ -6,7 +6,7 @@ import {
 	createUser,
 	deleteUser,
 	forgotPasswordToken,
-	// getAllOrder,
+	getAllOrder,
 	getAllUsers,
 	getUser,
 	getUserCart,
@@ -14,7 +14,6 @@ import {
 	getWishlist,
 	logOut,
 	refreshTokenHandler,
-	// removeCart,
 	removeCartItem,
 	resetPassword,
 	saveAddress,
@@ -48,13 +47,12 @@ router.post("/cart/create-order", auth, createOrder);
 router.put("/address", auth, saveAddress);
 router.get("/all-users", auth, isAdmin, getAllUsers);
 router.get("/get-orders", auth, getUserOrder);
-// router.get("/all-orders", auth, isAdmin, getAllOrder);
+router.get("/all-orders", auth, isAdmin, getAllOrder);
 router.get("/refresh", refreshTokenHandler);
 router.get("/logout", logOut);
 router.get("/wishlist", auth, getWishlist);
 router.get("/cart", auth, getUserCart);
 router.get("/:id", auth, getUser);
-// router.delete("/remove-cart", auth, removeCart);
 router.delete("/remove-cart-product/:id", auth, removeCartItem);
 router.delete(
 	"/update-cart-product/:id/:newquantity",

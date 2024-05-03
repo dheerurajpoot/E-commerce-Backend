@@ -482,19 +482,6 @@ export const getUserOrder = async (req, res) => {
 	}
 };
 
-// empty cart
-// export const removeCart = async (req, res) => {
-// 	const { _id } = req.user;
-// 	validateUserId(_id);
-// 	try {
-// 		const user = await User.findById(_id);
-// 		const cart = await Cart.findOneAndDelete({ orderBy: user._id });
-// 		res.json(cart);
-// 	} catch (error) {
-// 		console.log(error);
-// 	}
-// };
-
 // // apply coupon
 
 // export const applyCoupon = async (req, res) => {
@@ -524,19 +511,20 @@ export const getUserOrder = async (req, res) => {
 // 	res.status(200).json(totalAfterDiscount);
 // };
 
-// // get all orders
-// export const getAllOrder = async (req, res) => {
-// 	try {
-// 		const allOrders = await Order.find()
-// 			.populate("products.product")
-// 			.populate("orderBy")
-// 			.exec();
-// 		res.status(200).json(allOrders);
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.status(500).json({ error: "Internal Server Error" });
-// 	}
-// };
+// get all orders
+
+export const getAllOrder = async (req, res) => {
+	try {
+		const allOrders = await Order.find()
+			.populate("orderItems.product")
+			.populate("user")
+			.exec();
+		res.status(200).json(allOrders);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
 
 // // update order status
 // export const updateOrderStatus = async (req, res) => {
