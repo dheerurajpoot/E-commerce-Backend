@@ -526,27 +526,25 @@ export const getAllOrder = async (req, res) => {
 	}
 };
 
-// // update order status
-// export const updateOrderStatus = async (req, res) => {
-// 	const { status } = req.body;
-// 	const { id } = req.params;
-// 	validateUserId(id);
-// 	try {
-// 		const orderStatus = await Order.findByIdAndUpdate(
-// 			id,
-// 			{
-// 				orderStatus: status,
-// 				// paymentIntent: {
-// 				// 	status: status,
-// 				// },
-// 			},
-// 			{
-// 				new: true,
-// 			}
-// 		);
-// 		res.json(orderStatus);
-// 	} catch (error) {
-// 		console.log(error);
-// 		res.status(500).json({ error: "Internal Server Error" });
-// 	}
-// };
+// update order status
+
+export const updateOrderStatus = async (req, res) => {
+	const { status } = req.body;
+	const { id } = req.params;
+	validateUserId(id);
+	try {
+		const orderStatus = await Order.findByIdAndUpdate(
+			id,
+			{
+				orderStatus: status,
+			},
+			{
+				new: true,
+			}
+		);
+		res.json(orderStatus);
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};

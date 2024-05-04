@@ -18,7 +18,7 @@ import {
 	resetPassword,
 	saveAddress,
 	updateCartProductQty,
-	// updateOrderStatus,
+	updateOrderStatus,
 	updatePassword,
 	updateUser,
 	userCart,
@@ -35,7 +35,7 @@ router.post("/register", createUser);
 router.post("/forgot-password-token", forgotPasswordToken);
 router.put("/reset-password/:token", resetPassword);
 router.put("/password", auth, updatePassword);
-// router.put("/orders/order-status/:id", auth, isAdmin, updateOrderStatus);
+router.put("/orders/order-status/:id", auth, isAdmin, updateOrderStatus);
 router.post("/login", userLogin);
 router.post("/admin-login", adminLogin);
 router.post("/cart", auth, userCart);
