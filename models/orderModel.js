@@ -82,7 +82,7 @@ let orderSchema = new mongoose.Schema(
 		},
 		orderStatus: {
 			type: String,
-			default: "ordered",
+			default: "Ordered",
 		},
 	},
 	{ timestamps: true }
