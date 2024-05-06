@@ -419,6 +419,22 @@ export const removeCartItem = async (req, res) => {
 	}
 };
 
+// empty user cart
+
+export const emptyUserCart = async (req, res) => {
+	const { _id } = req.user;
+	validateUserId(_id);
+	try {
+		const cartItems = await Cart.find({ userId: _id });
+		await Cart.deleteMany({ userId: _id });
+
+		res.json({ message: "Cart emptied successfully" });
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
+
 // update cart product quantity
 
 export const updateCartProductQty = async (req, res) => {
@@ -437,6 +453,8 @@ export const updateCartProductQty = async (req, res) => {
 		console.log(error);
 	}
 };
+
+// create orders
 
 export const createOrder = async (req, res) => {
 	const {

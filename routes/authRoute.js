@@ -5,6 +5,7 @@ import {
 	createOrder,
 	createUser,
 	deleteUser,
+	emptyUserCart,
 	forgotPasswordToken,
 	getAllOrder,
 	getAllUsers,
@@ -52,6 +53,7 @@ router.get("/refresh", refreshTokenHandler);
 router.get("/logout", logOut);
 router.get("/wishlist", auth, getWishlist);
 router.get("/cart", auth, getUserCart);
+router.delete("/empty-cart", auth, emptyUserCart);
 router.get("/:id", auth, getUser);
 router.delete("/remove-cart-product/:id", auth, removeCartItem);
 router.delete(
