@@ -317,7 +317,7 @@ export const forgotPasswordToken = async (req, res) => {
 	try {
 		const token = await user.createPasswordResetToken();
 		await user.save();
-		const resetUrl = `Hi please follow this link to resest your account password, this link is valid for 10 minutes from now <a href="http://localhost:5173/reset-password/${token}">Click Here</a>`;
+		const resetUrl = `Hi please follow this link to resest your account password, this link is valid for 10 minutes from now <a href="https://drstore.vercel.app/reset-password/${token}">Click Here</a>`;
 		const data = {
 			to: email,
 			text: "Hey User",
