@@ -15,7 +15,6 @@ import morgan from "morgan";
 import cors from "cors";
 const app = express();
 
-// database connection
 dbconnect();
 app.get("/", function (req, res) {
 	res.send("server is running....,");
