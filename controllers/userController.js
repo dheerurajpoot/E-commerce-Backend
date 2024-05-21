@@ -5,18 +5,29 @@ import { validateUserId } from "../utils/validateUserId.js";
 import jwt from "jsonwebtoken";
 import { sendMail } from "./mailController.js";
 import crypto from "crypto";
-import { Product } from "../models/productModel.js";
 import { Cart } from "../models/cartModel.js";
-import { Coupon } from "../models/couponModel.js";
 import { Order } from "../models/orderModel.js";
-import uniqid from "uniqid";
+import { registerMail } from "../config/registerMailFormate.js";
+import { orderMail } from "../config/orderMail.js";
+// import { Product } from "../models/productModel.js";
+// import { Coupon } from "../models/couponModel.js";
+// import uniqid from "uniqid";
 
 export const createUser = async (req, res) => {
 	try {
-		const email = req.body;
-		const findUser = await User.findOne(email);
+		const { name, email } = req.body;
+		const findUser = await User.findOne({ email });
 		if (!findUser) {
 			const newUser = await User.create(req.body);
+			if (newUser) {
+				let data = {
+					to: email,
+					subject: `Welcome mail from DR Store`,
+					text: "",
+					html: registerMail(name),
+				};
+				sendMail(data);
+			}
 			res.status(200).json(newUser);
 		} else {
 			res.status(500).json({
@@ -320,9 +331,9 @@ export const forgotPasswordToken = async (req, res) => {
 		const resetUrl = `Hi please follow this link to resest your account password, this link is valid for 10 minutes from now <a href="https://drstore.vercel.app/reset-password/${token}">Click Here</a>`;
 		const data = {
 			to: email,
-			text: "Hey User",
+			text: "",
 			subject: "Forgot Password Link",
-			htm: resetUrl,
+			html: resetUrl,
 		};
 		sendMail(data);
 		res.json(token);
@@ -464,7 +475,7 @@ export const createOrder = async (req, res) => {
 		priceAfterDiscount,
 		paymentInfo,
 	} = req.body;
-	const { _id } = req.user;
+	const { _id, email, name } = req.user;
 	validateUserId(_id);
 	try {
 		const order = await Order.create({
@@ -475,6 +486,15 @@ export const createOrder = async (req, res) => {
 			paymentInfo,
 			user: _id,
 		});
+		if (order) {
+			let data = {
+				to: email,
+				text: "",
+				subject: "Your Order is Successfully Placed!",
+				html: orderMail(name),
+			};
+			sendMail(data);
+		}
 		res.json({
 			order,
 			success: true,

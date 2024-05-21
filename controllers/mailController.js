@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-export const sendMail = async (data, req, res) => {
+export const sendMail = async (data) => {
 	const transporter = nodemailer.createTransport({
 		host: "smtp.gmail.com",
 		port: 587,
@@ -13,15 +13,10 @@ export const sendMail = async (data, req, res) => {
 
 	// send mail with defined transport object
 	const info = await transporter.sendMail({
-		from: '"Hey 👻" <drexpress90@gmail.com>', // sender address
+		from: '"DR Store 🛍️ " <rajpootdheeru90@gmail.com>',
 		to: data.to,
 		subject: data.subject,
 		text: data.text,
-		html: data.htm,
+		html: data.html,
 	});
-
-	console.log("Message sent: %s", info.messageId);
-	// Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
-
-	console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
 };
