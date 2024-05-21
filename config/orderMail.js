@@ -435,7 +435,7 @@ export const orderMail = (userName) => {
                                       ">
                                       <a
                                         target="_blank"
-                                        href="https://viewstripo.email"
+                                        href="https://drstore.vercel.app/"
                                         style="
                                           mso-line-height-rule: exactly;
                                           text-decoration: underline;

@@ -9,6 +9,7 @@ import { Cart } from "../models/cartModel.js";
 import { Order } from "../models/orderModel.js";
 import { registerMail } from "../config/registerMailFormate.js";
 import { orderMail } from "../config/orderMail.js";
+import { orderStatusMail } from "../config/orderStatusMail.js";
 // import { Product } from "../models/productModel.js";
 // import { Coupon } from "../models/couponModel.js";
 // import uniqid from "uniqid";
@@ -569,6 +570,7 @@ export const getAllOrder = async (req, res) => {
 export const updateOrderStatus = async (req, res) => {
 	const { status } = req.body;
 	const { id } = req.params;
+	const { email } = req.user;
 	validateUserId(id);
 	try {
 		const orderStatus = await Order.findByIdAndUpdate(
@@ -580,6 +582,15 @@ export const updateOrderStatus = async (req, res) => {
 				new: true,
 			}
 		);
+		if (orderStatus) {
+			let data = {
+				to: email,
+				text: "",
+				subject: "Your Order Status is Updated!",
+				html: orderStatusMail(status),
+			};
+			sendMail(data);
+		}
 		res.json(orderStatus);
 	} catch (error) {
 		console.log(error);

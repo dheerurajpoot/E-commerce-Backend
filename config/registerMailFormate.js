@@ -402,7 +402,7 @@ export const registerMail = (userName) => {
                                       ">
                                       <a
                                         target="_blank"
-                                        href="https://viewstripo.email"
+                                        href="https://drstore.vercel.app/"
                                         style="
                                           -webkit-text-size-adjust: none;
                                           -ms-text-size-adjust: none;
@@ -939,7 +939,7 @@ export const registerMail = (userName) => {
                                             ">
                                             <a
                                               target="_blank"
-                                              href="https://viewstripo.email"
+                                              href="https://drstore.vercel.app/"
                                               style="
                                                 -webkit-text-size-adjust: none;
                                                 -ms-text-size-adjust: none;
