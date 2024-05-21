@@ -568,9 +568,8 @@ export const getAllOrder = async (req, res) => {
 // update order status
 
 export const updateOrderStatus = async (req, res) => {
-	const { status } = req.body;
+	const { status, email } = req.body;
 	const { id } = req.params;
-	const { email } = req.user;
 	validateUserId(id);
 	try {
 		const orderStatus = await Order.findByIdAndUpdate(
@@ -582,15 +581,13 @@ export const updateOrderStatus = async (req, res) => {
 				new: true,
 			}
 		);
-		if (orderStatus) {
-			let data = {
-				to: email,
-				text: "",
-				subject: "Your Order Status is Updated!",
-				html: orderStatusMail(status),
-			};
-			sendMail(data);
-		}
+		let data = {
+			to: email,
+			text: "",
+			subject: "Your Order Status is Updated!",
+			html: orderStatusMail(status),
+		};
+		sendMail(data);
 		res.json(orderStatus);
 	} catch (error) {
 		console.log(error);

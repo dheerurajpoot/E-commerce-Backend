@@ -1,4 +1,4 @@
-export const orderStatusMail = (status) => {
+export const orderStatusMail = (orderStatus) => {
 	return `<!DOCTYPE html>
   <html lang="en">
     <head>
@@ -512,7 +512,7 @@ export const orderStatusMail = (status) => {
                                         Your
                                         order
                                         is
-                                        ${status}
+                                        ${orderStatus}
                                       </h1>
                                     </td>
                                   </tr>
