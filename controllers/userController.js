@@ -94,6 +94,12 @@ export const userLogin = async (req, res) => {
 				token: generateToken(findUser?._id),
 			});
 		} else {
+			if (!findUser?.isVerified) {
+				res.status(500).json({
+					message: "Please Verify your email first...",
+					success: false,
+				});
+			}
 			res.status(500).json({
 				message: "Invalid Email or Password",
 				success: false,
