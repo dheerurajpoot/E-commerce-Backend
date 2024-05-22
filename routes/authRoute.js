@@ -24,6 +24,7 @@ import {
 	updateUser,
 	userCart,
 	userLogin,
+	verifyEmail,
 } from "../controllers/userController.js";
 import { auth, isAdmin } from "../middlewares/authMiddleware.js";
 import {
@@ -33,6 +34,7 @@ import {
 const router = express.Router();
 
 router.post("/register", createUser);
+router.put("/verify/:id", verifyEmail);
 router.post("/forgot-password-token", forgotPasswordToken);
 router.put("/reset-password/:token", resetPassword);
 router.put("/password", auth, updatePassword);

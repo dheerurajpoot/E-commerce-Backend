@@ -23,9 +23,9 @@ export const createUser = async (req, res) => {
 			if (newUser) {
 				let data = {
 					to: email,
-					subject: `Welcome mail from DR Store`,
+					subject: `Verification Mail from DR Store`,
 					text: "",
-					html: registerMail(name),
+					html: registerMail(name, newUser?._id),
 				};
 				sendMail(data);
 			}
@@ -42,14 +42,39 @@ export const createUser = async (req, res) => {
 	}
 };
 
+// verify user email
+
+export const verifyEmail = async (req, res) => {
+	const { id } = req.params;
+	try {
+		const verifiedUser = await User.updateOne(
+			{ _id: id },
+			{
+				$set: { isVerified: true },
+			}
+		);
+		res.status(200).json({
+			message: "Mail verified Sucessfully",
+			success: true,
+		});
+	} catch (error) {
+		console.log(error);
+		res.status(500).json({ error: "Internal Server Error" });
+	}
+};
+
 //  user login
 
 export const userLogin = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 		const findUser = await User.findOne({ email });
-		if (findUser && (await findUser.isPasswordMatched(password))) {
-			const refreshToken = await generateRefreshToken(findUser?._id);
+		if (
+			findUser &&
+			(await findUser.isPasswordMatched(password)) &&
+			findUser?.isVerified
+		) {
+			const refreshToken = generateRefreshToken(findUser?._id);
 			const updateUser = await User.findByIdAndUpdate(
 				findUser.id,
 				{

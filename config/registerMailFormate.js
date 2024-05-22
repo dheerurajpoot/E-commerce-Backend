@@ -1,4 +1,4 @@
-export const registerMail = (userName) => {
+export const registerMail = (userName, id) => {
 	return `<!DOCTYPE html>
   <html lang="en">
     <head>
@@ -543,23 +543,9 @@ export const registerMail = (userName) => {
                                         up
                                         for
                                         a
-                                        account.<br /><br />You
-                                        can
-                                        directly
-                                        login
-                                        to
-                                        your
-                                        account
-                                        from
-                                        here,
-                                        to
-                                        login
-                                        into
-                                        your
-                                        account
-                                        click
-                                        below
-                                        button.
+                                        account.<br /><br />Tap the button below to confirm your email address.
+                                        If you didn't create an account, you can safely
+                                        ignore this email.
                                       </p>
                                     </td>
                                   </tr>
@@ -667,7 +653,7 @@ export const registerMail = (userName) => {
                                           mso-hide: all;
                                         "
                                         ><a
-                                          href="https://drstore.vercel.app/sign-in"
+                                          href="http://localhost:5173/verify/${id}"
                                           class="es-button msohide"
                                           target="_blank"
                                           style="
@@ -702,9 +688,8 @@ export const registerMail = (userName) => {
                                             padding-right: 5px;
                                           "
                                           >Click
-                                          Here
                                           to
-                                          Login</a
+                                          Verify Your Mail</a
                                         ></span
                                       >
                                     </td>
