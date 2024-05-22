@@ -653,7 +653,7 @@ export const registerMail = (userName, id) => {
                                           mso-hide: all;
                                         "
                                         ><a
-                                          href="http://localhost:5173/verify/${id}"
+                                          href="https://drstore.vercel.app/verify/${id}"
                                           class="es-button msohide"
                                           target="_blank"
                                           style="
