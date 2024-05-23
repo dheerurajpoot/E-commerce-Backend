@@ -13,10 +13,47 @@ import { orderStatusMail } from "../config/orderStatusMail.js";
 // import { Product } from "../models/productModel.js";
 // import { Coupon } from "../models/couponModel.js";
 // import uniqid from "uniqid";
+import dns from "dns";
+import { promisify } from "util";
+
+const dnsLookup = promisify(dns.resolveMx);
+
+const isValidEmailFormat = (email) => {
+	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+	return emailRegex.test(email);
+};
+
+const isValidEmailDomain = async (email) => {
+	const domain = email.split("@")[1];
+	try {
+		const addresses = await dnsLookup(domain);
+		return addresses && addresses.length > 0;
+	} catch (error) {
+		return false;
+	}
+};
 
 export const createUser = async (req, res) => {
 	try {
 		const { name, email } = req.body;
+
+		// Validate email format
+		if (!isValidEmailFormat(email)) {
+			return res.status(400).json({
+				message: "Please enter a valid email!",
+				success: false,
+			});
+		}
+
+		// Validate email domain
+		const emailDomainValid = await isValidEmailDomain(email);
+		if (!emailDomainValid) {
+			return res.status(400).json({
+				message: "Invalid email domain!",
+				success: false,
+			});
+		}
+
 		const findUser = await User.findOne({ email });
 		if (!findUser) {
 			const newUser = await User.create(req.body);
