@@ -32,7 +32,7 @@ export const createUser = async (req, res) => {
 			res.status(200).json(newUser);
 		} else {
 			res.status(500).json({
-				message: "User Already Exist",
+				message: "User Already exist with this Email!",
 				success: false,
 			});
 		}
