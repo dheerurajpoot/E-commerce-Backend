@@ -106,13 +106,20 @@ export const userLogin = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 		const findUser = await User.findOne({ email });
+		if (!findUser?.isVerified) {
+			res.status(500).json({
+				message: "Please Verify your email first...",
+				success: false,
+			});
+			return;
+		}
 		if (
 			findUser &&
 			(await findUser.isPasswordMatched(password)) &&
 			findUser?.isVerified
 		) {
 			const refreshToken = generateRefreshToken(findUser?._id);
-			const updateUser = await User.findByIdAndUpdate(
+			await User.findByIdAndUpdate(
 				findUser.id,
 				{
 					refreshToken: refreshToken,
@@ -131,12 +138,6 @@ export const userLogin = async (req, res) => {
 				token: generateToken(findUser?._id),
 			});
 		} else {
-			if (!findUser?.isVerified) {
-				res.status(500).json({
-					message: "Please Verify your email first...",
-					success: false,
-				});
-			}
 			res.status(500).json({
 				message: "Invalid Email or Password",
 				success: false,
