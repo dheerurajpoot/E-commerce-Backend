@@ -55,24 +55,28 @@ export const createUser = async (req, res) => {
 		}
 
 		const findUser = await User.findOne({ email });
-		if (!findUser) {
-			const newUser = await User.create(req.body);
-			if (newUser) {
-				let data = {
-					to: email,
-					subject: `Verification Mail from DR Store`,
-					text: "",
-					html: registerMail(name, newUser?._id),
-				};
-				sendMail(data);
-			}
-			res.status(200).json(newUser);
-		} else {
-			res.status(500).json({
-				message: "User Already exist with this Email!",
-				success: false,
-			});
-		}
+		// if (!findUser) {
+		// 	const newUser = await User.create(req.body);
+		// 	if (newUser) {
+		// 		let data = {
+		// 			to: email,
+		// 			subject: `Verification Mail from DR Store`,
+		// 			text: "",
+		// 			html: registerMail(name, newUser?._id),
+		// 		};
+		// 		sendMail(data);
+		// 	}
+		// 	res.status(200).json(newUser);
+		// } else {
+		// 	res.status(500).json({
+		// 		message: "User Already exist with this Email!",
+		// 		success: false,
+		// 	});
+		// }
+		return res.status(400).json({
+			message: "Server Down due to Attak domain!",
+			success: false,
+		});
 	} catch (error) {
 		console.log(error);
 		res.status(500).json({ error: "Internal Server Error" });
