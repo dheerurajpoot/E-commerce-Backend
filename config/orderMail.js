@@ -443,8 +443,8 @@ export const orderMail = (userName) => {
                                           font-size: 14px;
                                         "
                                         ><img
-                                          src="https://drstore.vercel.app/images/drstore.png"
-                                          alt="Logo"
+                                          src="../public/drstore.png"
+                                          alt="DR Store"
                                           style="
                                             display: block;
                                             font-size: 16px;

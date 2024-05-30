@@ -412,7 +412,7 @@ export const registerMail = (userName, id) => {
                                           font-size: 18px;
                                         "
                                         ><img
-                                          src="https://drstore.vercel.app/images/drstore.png"
+                                          src="../public/drstore.png"
                                           alt="DR Store"
                                           style="
                                             display: block;
