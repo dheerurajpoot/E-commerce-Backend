@@ -13,6 +13,7 @@ import {
 	getUserCart,
 	getUserOrder,
 	getWishlist,
+	limitUsers,
 	logOut,
 	refreshTokenHandler,
 	removeCartItem,
@@ -33,7 +34,7 @@ import {
 } from "../controllers/paymentController.js";
 const router = express.Router();
 
-router.post("/register", createUser);
+router.post("/register", limitUsers, createUser);
 router.put("/verify/:id", verifyEmail);
 router.post("/forgot-password-token", forgotPasswordToken);
 router.put("/reset-password/:token", resetPassword);

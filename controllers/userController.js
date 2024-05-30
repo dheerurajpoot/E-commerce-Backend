@@ -13,25 +13,22 @@ import { orderStatusMail } from "../config/orderStatusMail.js";
 // import { Product } from "../models/productModel.js";
 // import { Coupon } from "../models/couponModel.js";
 // import uniqid from "uniqid";
-import dns from "dns";
-import { promisify } from "util";
-
-const dnsLookup = promisify(dns.resolveMx);
+import rateLimit from "express-rate-limit";
 
 const isValidEmailFormat = (email) => {
 	const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 	return emailRegex.test(email);
 };
 
-const isValidEmailDomain = async (email) => {
-	const domain = email.split("@")[1];
-	try {
-		const addresses = await dnsLookup(domain);
-		return addresses && addresses.length > 0;
-	} catch (error) {
-		return false;
-	}
-};
+export const limitUsers = rateLimit({
+	windowMs: 15 * 60 * 1000, // 15 minutes
+	max: 100, // Limit each IP to 100 createUser requests per windowMs
+	message: {
+		message:
+			"Too many accounts created from this IP, please try again after 15 minutes",
+		success: false,
+	},
+});
 
 export const createUser = async (req, res) => {
 	try {
@@ -45,32 +42,19 @@ export const createUser = async (req, res) => {
 			});
 		}
 
-		// Validate email domain
-		const emailDomainValid = await isValidEmailDomain(email);
-		if (!emailDomainValid) {
-			return res.status(400).json({
-				message: "Invalid email domain!",
-				success: false,
-			});
-		}
-
 		const findUser = await User.findOne({ email });
 		if (!findUser) {
-			return res.status(400).json({
-				message: "Server Down due to Attak domain!",
-				success: false,
-			});
-			// const newUser = await User.create(req.body);
-			// if (newUser) {
-			// 	let data = {
-			// 		to: email,
-			// 		subject: `Verification Mail from DR Store`,
-			// 		text: "",
-			// 		html: registerMail(name, newUser?._id),
-			// 	};
-			// 	sendMail(data);
-			// }
-			// res.status(200).json(newUser);
+			const newUser = await User.create(req.body);
+			if (newUser) {
+				let data = {
+					to: email,
+					subject: `Verification Mail from DR Store`,
+					text: "",
+					html: registerMail(name, newUser?._id),
+				};
+				sendMail(data);
+			}
+			res.status(200).json(newUser);
 		} else {
 			res.status(500).json({
 				message: "User Already exist with this Email!",
@@ -88,7 +72,7 @@ export const createUser = async (req, res) => {
 export const verifyEmail = async (req, res) => {
 	const { id } = req.params;
 	try {
-		const verifiedUser = await User.updateOne(
+		await User.updateOne(
 			{ _id: id },
 			{
 				$set: { isVerified: true },

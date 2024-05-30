@@ -10,7 +10,6 @@ export const sendMail = async (data) => {
 			pass: process.env.MAIL_PASS,
 		},
 	});
-
 	// send mail with defined transport object
 	const info = await transporter.sendMail({
 		from: '"DR Store 🛍️ " <rajpootdheeru90@gmail.com>',
