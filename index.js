@@ -21,7 +21,27 @@ app.get("/", function (req, res) {
 	res.send("server is running....,");
 });
 
-app.use(cors());
+const allowedOrigins = [
+	"https://drstore-admin.vercel.app",
+	"https://drstore.vercel.app",
+];
+
+const corsOptions = {
+	origin: function (origin, callback) {
+		if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+			callback(null, true);
+		} else {
+			callback(new Error("Not allowed by CORS"));
+		}
+	},
+	optionsSuccessStatus: 200,
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests
+app.options("*", cors(corsOptions));
+
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
