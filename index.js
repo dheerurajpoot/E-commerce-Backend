@@ -21,12 +21,18 @@ app.get("/", function (req, res) {
 	res.send("server is running....,");
 });
 
+app.use((req, res, next) => {
+	res.header("Access-Control-Allow-Origin", "*");
+	next();
+});
+
 app.use(
 	cors({
 		orgin: [
 			"https://drstore-admin.vercel.app",
 			"https://drstore.vercel.app",
 		],
+		methods: "GET, POST, PATCH, DELETE, PUT",
 		credentials: true,
 	})
 );
