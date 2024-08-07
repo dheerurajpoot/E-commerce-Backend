@@ -28,11 +28,7 @@ app.use((req, res, next) => {
 
 app.use(
 	cors({
-		orgin: [
-			"https://drstore-admin.vercel.app",
-			"https://e-commerce-backend-xb1p.onrender.com",
-			"https://drstore.vercel.app",
-		],
+		orgin: "*",
 		methods: "GET, POST, PATCH, DELETE, PUT",
 		credentials: true,
 	})
