@@ -21,23 +21,22 @@ app.get("/", function (req, res) {
 	res.send("server is running....,");
 });
 
-app.use((req, res, next) => {
-	res.header("Access-Control-Allow-Origin", "*");
-	next();
-});
-
+// CORS configuration
 app.use(
-	cors({
-		orgin: "*",
-		methods: "GET, POST, PATCH, DELETE, PUT",
-		credentials: true,
-	})
+  cors({
+    origin: ["https://drstore-admin.vercel.app", "https://drstore.vercel.app"],
+    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
 );
+
 app.use(morgan("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// routes 
 app.use("/api/user", authRoute);
 app.use("/api/product", productRoute);
 app.use("/api/category", categoryRoute);
