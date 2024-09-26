@@ -21,15 +21,23 @@ app.get("/", function (req, res) {
 	res.send("server is running....,");
 });
 
-// CORS configuration
-app.use(
-  cors({
-    origin: ["https://drstore-admin.vercel.app", "https://drstore.vercel.app"],
-    methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+// Dynamic CORS configuration based on request origin
+const allowedOrigins = ["https://drstore.vercel.app", "https://drstore-admin.vercel.app"];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
