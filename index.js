@@ -22,14 +22,23 @@ app.get("/", function (req, res) {
 });
 
 app.use((req, res, next) => {
-	console.log("Request Origin:", req.headers.origin);
-	console.log("Request Method:", req.method);
+	res.header(
+		"Access-Control-Allow-Origin",
+		"https://drstore-admin.vercel.app"
+	);
+	res.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+	res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+	res.header("Access-Control-Allow-Credentials", "true");
 	next();
 });
 
 // CORS Configuration
 const corsOptions = {
-	origin: ["https://drstore-admin.vercel.app", "https://drstore.vercel.app"],
+	origin: [
+		"http://localhost:3001",
+		"https://drstore-admin.vercel.app",
+		"https://drstore.vercel.app",
+	],
 	methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 	credentials: true,
