@@ -21,6 +21,12 @@ app.get("/", function (req, res) {
 	res.send("server is running....,");
 });
 
+app.use((req, res, next) => {
+	console.log("Request Origin:", req.headers.origin);
+	console.log("Request Method:", req.method);
+	next();
+});
+
 // CORS Configuration
 const corsOptions = {
 	origin: ["https://drstore-admin.vercel.app", "https://drstore.vercel.app"],
