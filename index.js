@@ -27,7 +27,7 @@ app.use(
 		origin: "*",
 		methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
 		allowedHeaders: ["Content-Type", "Authorization", "X-Custom-Header"],
-		credentials: true,
+		// credentials: true,
 	})
 );
 
