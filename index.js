@@ -21,23 +21,15 @@ app.get("/", function (req, res) {
 	res.send("server is running....,");
 });
 
-// CORS options
-const corsOptions = {
-	origin: [
-		"http://localhost:3001",
-		"https://drstore.vercel.app",
-		"https://drstore-admin.vercel.app",
-	],
-	methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
-	allowedHeaders: ["Content-Type", "Authorization"],
-	credentials: true,
-};
-
-// Apply CORS middleware
-app.use(cors(corsOptions));
-
-// Handle preflight requests
-app.options("*", cors(corsOptions));
+// CORS Configuration
+app.use(
+	cors({
+		origin: "*",
+		methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+		allowedHeaders: ["Content-Type", "Authorization", "X-Custom-Header"],
+		credentials: true,
+	})
+);
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
