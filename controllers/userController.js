@@ -143,9 +143,14 @@ export const adminLogin = async (req, res) => {
 	try {
 		const { email, password } = req.body;
 		const findAdmin = await User.findOne({ email });
+		if (!findAdmin) {
+			return res.status(301).json({
+				message: "You are not Registered!",
+			});
+		}
 		if (findAdmin.role !== "admin") {
-			res.status(301).json({
-				message: "You are not Authorised",
+			return res.status(301).json({
+				message: "You are not Authorised!",
 			});
 		}
 		if (findAdmin && (await findAdmin.isPasswordMatched(password))) {
@@ -161,7 +166,7 @@ export const adminLogin = async (req, res) => {
 				httpOnly: true,
 				maxAge: 72 * 60 * 60 * 1000,
 			});
-			res.status(200).json({
+			return res.status(200).json({
 				_id: findAdmin?._id,
 				name: findAdmin?.name,
 				email: findAdmin?.email,
@@ -169,14 +174,14 @@ export const adminLogin = async (req, res) => {
 				token: generateToken(findAdmin?._id),
 			});
 		} else {
-			res.status(500).json({
+			return res.status(500).json({
 				message: "Invalid Email or Password",
 				success: false,
 			});
 		}
 	} catch (error) {
 		console.log(error);
-		res.status(500).json({ error: "Internal Server Error" });
+		res.status(500).json({ message: "Internal Server Error" });
 	}
 };
 
