@@ -23,11 +23,7 @@ app.get("/", function (req, res) {
 
 // CORS Configuration
 const corsOptions = {
-	origin: [
-		"https://drstore-admin.vercel.app",
-		"https://drstore-admin.vercel.app/",
-		"https://drstore.vercel.app",
-	],
+	origin: ["https://drstore-admin.vercel.app", "https://drstore.vercel.app"],
 	methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 	credentials: true,
