@@ -22,14 +22,19 @@ app.get("/", function (req, res) {
 });
 
 // CORS Configuration
-app.use(
-	cors({
-		origin: "*",
-		methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
-		allowedHeaders: ["Content-Type", "Authorization", "X-Custom-Header"],
-		// credentials: true,
-	})
-);
+const corsOptions = {
+	origin: [
+		"https://drstore-admin.vercel.app",
+		"https://drstore-admin.vercel.app/",
+		"https://drstore.vercel.app",
+	],
+	methods: ["GET", "POST", "PATCH", "DELETE", "PUT"],
+	allowedHeaders: ["Content-Type", "Authorization"],
+	credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(morgan("dev"));
 app.use(bodyParser.json());
