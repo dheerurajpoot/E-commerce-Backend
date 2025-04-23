@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 // CORS Configuration
 const corsOptions = {
 	origin: [
-		"http://localhost:3001",
+		"https://www.hiketok.com",
 		"https://drstore-admin.vercel.app",
 		"https://drstore.vercel.app",
 	],
